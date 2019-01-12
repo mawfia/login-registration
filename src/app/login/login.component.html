@@ -1,0 +1,29 @@
+<app-navigation-bar></app-navigation-bar>
+<h1>Login</h1>
+<form #formData='ngForm' (submit)="login(formData.value)" novalidate>
+	<label>Email:</label>
+	<input
+		type="email"
+		name="email"
+		required
+		pattern="^\w+@\w+[.]{1}\S+$"
+		[(ngModel)]="guest.email"
+		#email="ngModel"
+	/><span *ngIf="email.errors && email.dirty" class="error"> Email must be valid.</span>
+		<span *ngIf="!email.errors && email.dirty" class="correct"> Correct.</span><br>
+	<label>Password:</label>
+	<input
+		type="password"
+		name="password"
+		required
+		pattern="^(?=.*[0-9])(?=.*[A-Z])\S{8,16}$"
+		[(ngModel)]="guest.password"
+		#password="ngModel"
+	/><span *ngIf="password.errors && password.dirty" class="error"> Password must be 8-16 characters and include one uppercase letter and number.</span>
+		<span *ngIf="!password.errors && password.dirty" class="correct"> Correct.</span><br>
+	<input [disabled]="password.errors || email.errors"
+		type="submit"
+		value="Login"
+	>
+</form>
+<span *ngIf="error">{{ error }}</span>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../user';
 import * as $ from "../../jquery-3.3.1.min.js";
-import { of, Observable, from, BehaviorSubject, Observer } 'rxjs';
+import { Observable, BehaviorSubject, Observer, of, from } from 'rxjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AuthenticationService } from "../authentication.service";
 
@@ -19,7 +19,7 @@ export class RegistrationComponent implements OnInit {
   
   user: User = new User();
   guest: User = new User();
-  errors: null;
+  errors: {email: null, birthday: null};
   
   constructor(private _authenticationService: AuthenticationService, private _route: ActivatedRoute, private _router: Router) { }
 
@@ -28,23 +28,10 @@ export class RegistrationComponent implements OnInit {
   }
   
   register(guest: User): void{
-	//let observable: Observable = this._authenticationService.registerUser(this.guest);
-
-	/*this._authenticationService.userObservers.subscribe(
-		(user: User) => { 
-			if(user) { this.user = user; console.log(this.user); this._router.navigate(['/dashboard']); }
-			else if(observable != null) {
-				observable.subscribe( success => { this.errors = success['errors']; console.log(success['errors']); } );
-			}
-		} 
-		
-	)*/
-	this._authenticationService.registerUser(this.guest).subscribe( result => { 
+		this._authenticationService.registerUser(this.guest).subscribe( result => { 
 			if(result['message'] == "Success") this.login(result['user']);
-			else if(result['message'] == "Error") { this.errors = result['errors']; console.log(this.errors); }
+			else if(result['message'] == "Error") { this.errors = result['errors']; }
 		}, err => console.log(err) );
-	  //this.guest = new User();
-	  //this._router.navigateByUrl(['/register']);
   }
   
    login(guest: User): void{
@@ -52,7 +39,7 @@ export class RegistrationComponent implements OnInit {
 	this._authenticationService.loginUser(this.guest);
 
 	this._authenticationService.userObservers.subscribe(
-		(user: User) => { this.user = user; this._router.navigate(['/dashboard']); }
+		(user: any) => { this.user = user; this._router.navigate(['/dashboard']); }
 	)
   }
   

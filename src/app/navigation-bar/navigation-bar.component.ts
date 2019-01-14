@@ -16,16 +16,16 @@ export class NavigationBarComponent implements OnInit {
 
   ngOnInit() {
 	  this.loggedIn = this._authenticationService.isAuthenticated();
-	  this._route.url.subscribe( success => 
-		
-		  if(success.length > 0){
-				if(success[0].path == "login") this.navButtons = [false, true]; //[login, register]
-				else if(success[0].path == "registration") this.navButtons = [true, false];
-				else this.navButtons = [false, false];
+	  this._route.url.subscribe( success => {
+
+	  	if(success.length > 0){
+			if(success[0].path == "login") this.navButtons = [false, true]; //[login, register]
+			else if(success[0].path == "registration") this.navButtons = [true, false];
+			else this.navButtons = [false, false];
 		  }
 		  else this.navButtons = [false, true];
-	  
-	  )
+
+	  })
   }
 
   logout(){	  

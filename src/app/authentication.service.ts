@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { of, Observable, BehaviorSubject, Observer } 'rxjs';
+import { Observable, BehaviorSubject, Observer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { User } from './user';
 import { CookieService } from 'ngx-cookie';
@@ -8,18 +8,18 @@ import { CookieService } from 'ngx-cookie';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  userObservers: BehaviorSubject<Observerable[]> = new BehaviorSubject<Observerable[]>;
+  userObservers: BehaviorSubject<any[]> = new BehaviorSubject([]);
   
   constructor(private _http: HttpClient, private _cookieService: CookieService) {
   }
   
-  loginUser(user: User): Observable{
+  loginUser(user: User): Observable<User>{
 		//return this._http.post<User>(`/login`, user).subscribe( success => console.log(success), err => console.log(err) );
 		//console.log("hello service.", user);
-		let observable: Observable = this._http.post<User>('/login', user);
+		let observable: Observable<User> = this._http.post<User>('/login', user);
 		
 		observable.subscribe(
-			(observer: Observer) => { 
+			(observer) => { 
 				if(observer['message'] == 'Success') { this.userObservers.next(observer['user']); return null; }
 			}
 		);
@@ -27,12 +27,12 @@ export class AuthenticationService {
 		return observable;
   }
   
-  registerUser(user: User): Observable{
+  registerUser(user: User): Observable<any>{
 		//return this._http.post<User>(`/login`, user).subscribe( success => console.log(success), err => console.log(err) );
 		//console.log("hello service.", user);
 		//let observable: Observable = 
 		
-		return this._http.post<User>('/register', user);
+		return this._http.post<any>('/register', user);
 		
 		/*observable.subscribe(
 			(observer: Observer) => { 
@@ -43,12 +43,12 @@ export class AuthenticationService {
 		//return observable;
   }
   
-  getLoggedInUser(): Observerable{
+  getLoggedInUser(): Observable<User>{
 	  return this._http.post<User>(`/user`, {id: this._cookieService.get('userID')} );
   }
   
-  logout(): boolean{
-	  return this._http.delete<boolean>('/logout');
+  logout(): Observable<{}>{
+	  return this._http.delete('/logout');
   }
   
   isAuthenticated(): boolean{

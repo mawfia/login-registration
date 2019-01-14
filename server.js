@@ -70,14 +70,9 @@ const UserSchema = new mongoose.Schema({
     state: {type: String, required: [true, 'Missing state.'], minlength : [2, `State name is too short. (2-25 characters)`], maxlength : [25, 'State name is too long. (2-25 characters)']}
 }, {timestamps: true })
 
-mongoose.connect('mongodb://localhost/login_registration');
+mongoose.connect('mongodb://localhost:27017/login_registration');
 mongoose.model('User', UserSchema);
 const User = mongoose.model('User');
-
-/*app.get('/', (request, response) => {
-
-    return request.session.user ? response.redirect('/profile') : response.render('index', {user: {}, form: 0, moment: moment});
-})*/
 
 app.post('/register', (request, response) => {
 
@@ -87,9 +82,9 @@ app.post('/register', (request, response) => {
 
     user.save( err => {
         if(err) {
-			//let errors = {};
-            //for(let error in err.errors) errors[error] = (err.errors[error].message);
-			const errors = Object.key(err.errors).map( key => err.errors[key].message );
+			let errors = {};
+            for(let error in err.errors) errors[error] = (err.errors[error].message);
+			//const errors = Object.key(err.errors).map( key => err.errors[key].message );
             return response.json({message: 'Error', errors: errors});
         }
         else {
@@ -106,10 +101,6 @@ app.post('/register', (request, response) => {
     })
 })
 
-/*app.get('/profile', (request, response) => {
-    return request.session.user ? response.render('profile', {user:request.session.user}) : response.redirect('/');
-})*/
-
 app.post('/user', (request, response)=> {
 	//console.log("server");
 	User.findOne({_id: mongoose.Types.ObjectId(request.body.id) }, (err, user)=> {
@@ -118,6 +109,7 @@ app.post('/user', (request, response)=> {
 	)
 	//return response.json({user:null});
 })
+
 		
 app.post('/login', (request, response) => {
 

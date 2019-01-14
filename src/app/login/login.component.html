@@ -9,8 +9,8 @@
 		pattern="^\w+@\w+[.]{1}\S+$"
 		[(ngModel)]="guest.email"
 		#email="ngModel"
-	/><span *ngIf="email.errors && email.dirty" class="error"> Email must be valid.</span>
-		<span *ngIf="!email.errors && email.dirty" class="correct"> Correct.</span><br>
+	/><span *ngIf="email.errors && email.dirty" class="warning"> Email must be valid.</span>
+		<span *ngIf="!email.errors && email.dirty" class="correct"> Valid.</span><br>
 	<label>Password:</label>
 	<input
 		type="password"
@@ -19,11 +19,11 @@
 		pattern="^(?=.*[0-9])(?=.*[A-Z])\S{8,16}$"
 		[(ngModel)]="guest.password"
 		#password="ngModel"
-	/><span *ngIf="password.errors && password.dirty" class="error"> Password must be 8-16 characters and include one uppercase letter and number.</span>
-		<span *ngIf="!password.errors && password.dirty" class="correct"> Correct.</span><br>
+	/><span *ngIf="password.errors && password.dirty" class="warning"> Password must be 8-16 characters and include one uppercase letter and number.</span>
+		<span *ngIf="!password.errors && password.dirty" class="correct"> Valid.</span><br>
 	<input [disabled]="password.errors || email.errors"
 		type="submit"
 		value="Login"
 	>
 </form>
-<span *ngIf="error">{{ error }}</span>
+<span *ngIf="error" class="error">{{ error }}</span>
